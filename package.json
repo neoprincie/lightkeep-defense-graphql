@@ -5,8 +5,8 @@
   "scripts": {
     "compile": "tsc",
     "start": "npm run compile && node ./dist/index.js",
-    "docker": "docker-compose up -d",
-    "docker-clean": "docker-compose down -v && docker-compose up -d "
+    "docker": "docker-compose up -d --build",
+    "docker-clean": "docker-compose down -v && docker-compose up -d --build"
   },
   "keywords": [],
   "author": "",
@@ -15,10 +15,15 @@
   "type": "module",
   "dependencies": {
     "@apollo/server": "^4.11.3",
+    "@prisma/client": "^6.4.1",
     "graphql": "^16.10.0"
   },
   "devDependencies": {
     "@types/node": "^22.13.4",
+    "prisma": "^6.4.1",
     "typescript": "^5.7.3"
+  },
+  "prisma": {
+    "seed": "npx tsx prisma/seed.ts"
   }
 }
