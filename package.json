@@ -5,8 +5,8 @@
   "scripts": {
     "compile": "tsc",
     "start": "npm run compile && node ./dist/src/index.js",
-    "docker": "docker-compose up -d --build",
-    "docker-clean": "docker-compose down -v && docker-compose up -d --build"
+    "rebuild": "docker-compose up -d --build && prisma generate && prisma migrate deploy",
+    "setup": "docker-compose down -v && docker-compose up -d --build && prisma generate && prisma migrate deploy && prisma db seed"
   },
   "keywords": [],
   "author": "",
