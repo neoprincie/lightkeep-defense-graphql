@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function seed() {
-    await prisma.user.create({
+    let user = await prisma.user.create({
         data: {
             name: "princie",
             email: "bryprinc@gmail.com"
@@ -20,13 +20,27 @@ async function seed() {
         }
     })
 
-    await prisma.characterClass.create({
+    let charClass = await prisma.characterClass.create({
         data: {
             name: "Wizard",
             baseHp: 5,
             baseMp: 9,
             baseAttack: 1,
             baseDefense: 1
+        }
+    })
+
+    await prisma.character.create({
+        data: {
+            name: "Napryn",
+            userId: user.id,
+            classId: charClass.id,
+            level: 1,
+            currentHp: charClass.baseHp,
+            maxHp: charClass.baseHp,
+            attack: charClass.baseAttack,
+            defense: charClass.baseDefense,
+            experience: 0
         }
     })
 }

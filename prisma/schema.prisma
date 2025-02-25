@@ -11,6 +11,8 @@ model User {
   id    Int     @id @default(autoincrement())
   name  String? 
   email String  @unique
+
+  Character Character[]
 }
 
 model CharacterClass {
@@ -20,4 +22,25 @@ model CharacterClass {
     baseMp      Int
     baseAttack  Int
     baseDefense Int
+
+    Character Character[]
+}
+
+model Character {
+  id  Int @id @default(autoincrement())
+  name  String  @unique
+
+  user  User  @relation(fields: [userId], references: [id])
+  userId Int
+
+  class CharacterClass @relation(fields: [classId], references: [id])
+  classId Int
+
+  level Int
+  currentHp Int
+  maxHp Int
+  attack Int
+  defense Int
+  experience Int
+  createdAt DateTime @default(now())
 }

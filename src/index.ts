@@ -1,15 +1,21 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
 // your data.
 const typeDefs = `#graphql
-  # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
+  type User {
+    id: Int
+    name: String
+    email: String
+  }
 
-  # This "Book" type defines the queryable fields for every book in our data source.
   type CharacterClass {
-    id: Number
+    id: Int
     name: String
     baseHp: Int
     baseMp: Int
@@ -17,36 +23,35 @@ const typeDefs = `#graphql
     baseDefense: Int
   }
 
+  type Character {
+    id: Int
+    name: String
+    user: User
+    class: CharacterClass
+    level: Int
+    currentHp: Int
+    maxHp: Int
+    attack: Int
+    defense: Int
+    experience: Int
+  }
 
-  # The "Query" type is special: it lists all of the available queries that
-  # clients can execute, along with the return type for each. In this
-  # case, the "books" query returns an array of zero or more Books (defined above).
   type Query {
     characterClasses: [CharacterClass]
+    characters: [Character]
   }
 `;
-
-const books = [
-    {
-      title: 'The Awakening',
-      author: 'Kate Chopin',
-    },
-    {
-      title: 'City of Glass',
-      author: 'Paul Auster',
-    },
-  ];
-
-  const getCharacterClass = () => {
-    
-  }
-
 
 // Resolvers define how to fetch the types defined in your schema.
 // This resolver retrieves books from the "books" array above.
 const resolvers = {
     Query: {
-        books: () => books,
+        characterClasses: () => prisma.characterClass.findMany(),
+        characters: (userId: number) => prisma.character.findMany({
+            where: {
+                userId: userId
+            }
+        })
     },
 };
 
@@ -66,4 +71,4 @@ const server = new ApolloServer({
     listen: { port: 4000 },
   });
   
-  console.log(`🚀  Server ready at: ${url}`);
+  console.log(`🚀 yay Server ready at: ${url}`);
