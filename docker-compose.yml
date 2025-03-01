@@ -7,9 +7,7 @@ services:
     ports:
       - "8080:8080"
   db:
-    build:
-      context: .
-      dockerfile: DockerFile.db
+    image: postgres:latest
     container_name: lightkeep-defense-db
     environment:
       POSTGRES_USER: postgres
