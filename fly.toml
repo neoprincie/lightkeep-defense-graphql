@@ -21,3 +21,6 @@ primary_region = 'iad'
   cpu_kind = 'shared'
   cpus = 1
   memory_mb = 256
+
+[deploy]
+  release_command = "npx prisma migrate deploy && npx prisma db seed"
