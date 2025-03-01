@@ -8,8 +8,8 @@ RUN npm install
 COPY . .
 
 RUN npx prisma generate 
-RUN prisma migrate deploy 
-RUN prisma db seed
+RUN npx prisma migrate deploy 
+RUN npx prisma db seed
 
 RUN npm run compile
 
