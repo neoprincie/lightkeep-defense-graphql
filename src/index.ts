@@ -2,6 +2,9 @@ import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { PrismaClient } from "@prisma/client";
 
+import { characterClasses } from './characterClasses/index.js';
+import { characters } from './characters/index.js'
+
 const prisma = new PrismaClient();
 
 // A schema is a collection of type definitions (hence "typeDefs")
@@ -14,32 +17,7 @@ const typeDefs = `#graphql
     email: String
   }
 
-  type CharacterClass {
-    id: Int
-    name: String
-    baseHp: Int
-    baseMp: Int
-    baseAttack: Int
-    baseDefense: Int
-  }
-
-  type Character {
-    id: Int
-    name: String
-    user: User
-    class: CharacterClass
-    level: Int
-    currentHp: Int
-    maxHp: Int
-    attack: Int
-    defense: Int
-    experience: Int
-  }
-
-  type Query {
-    characterClasses: [CharacterClass]
-    characters: [Character]
-  }
+  type Query
 `;
 
 // Resolvers define how to fetch the types defined in your schema.
@@ -59,8 +37,8 @@ const resolvers = {
 // The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
 const server = new ApolloServer({
-    typeDefs,
-    resolvers,
+    typeDefs: [typeDefs, characterClasses.typeDef, characters.typeDef],
+    resolvers: [characterClasses.resolvers, characters.resolvers],
   });
   
   // Passing an ApolloServer instance to the `startStandaloneServer` function:
