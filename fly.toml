@@ -23,4 +23,4 @@ primary_region = 'iad'
   memory_mb = 256
 
 [deploy]
-  release_command = "npx prisma migrate deploy && npx prisma db seed"
+  release_command = "npx prisma migrate deploy && node dist/prisma/seed.js"
