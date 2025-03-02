@@ -4,6 +4,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: lightkeep-defense-graphql
+    environment:
+      DATABASE_URL: postgresql://postgres:mysecretpassword@db:5432/sampledb
     ports:
       - "8080:8080"
   db:
