@@ -6,7 +6,8 @@
     "compile": "tsc",
     "start": "npm run compile && node ./dist/src/index.js",
     "rebuild": "docker-compose up -d --build && prisma generate && prisma migrate deploy",
-    "setup": "docker-compose down -v && docker-compose up -d --build && prisma generate && prisma migrate deploy && prisma db seed"
+    "setup": "docker-compose down -v && docker-compose up -d --build && prisma generate && prisma migrate deploy && prisma db seed",
+    "test": "vitest"
   },
   "keywords": [],
   "author": "",
@@ -16,7 +17,8 @@
   "dependencies": {
     "@apollo/server": "^4.11.3",
     "@prisma/client": "^6.4.1",
-    "graphql": "^16.10.0"
+    "graphql": "^16.10.0",
+    "vitest": "^3.0.7"
   },
   "devDependencies": {
     "@types/node": "^22.13.4",
