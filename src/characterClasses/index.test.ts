@@ -41,7 +41,7 @@ test('says hello, world!', async () => {
 
     expect(response.body.singleResult.errors).toBeUndefined();
     expect(response.body.singleResult.data.characterClasses[0].name).toBe("Warrior");
-    expect(response.body.singleResult.data.characterClasses[0].baseAttack).toBe(1);
+    expect(response.body.singleResult.data.characterClasses[0].baseAttack).toBe(2);
     expect(response.body.singleResult.data.characterClasses[0].baseDefense).toBe(2);
     expect(response.body.singleResult.data.characterClasses[0].baseHp).toBe(3);
     expect(response.body.singleResult.data.characterClasses[0].baseMp).toBe(4);
