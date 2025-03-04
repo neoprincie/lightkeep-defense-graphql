@@ -19,6 +19,8 @@ jobs:
       
   deploy:
     runs-on: ubuntu-latest
+    needs: test
+    if: success()
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
