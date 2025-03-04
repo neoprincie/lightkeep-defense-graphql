@@ -7,7 +7,8 @@
     "start": "npm run compile && node ./dist/src/index.js",
     "rebuild": "docker-compose up -d --build && prisma generate && prisma migrate deploy",
     "setup": "docker-compose down -v && docker-compose up -d --build && prisma generate && prisma migrate deploy && prisma db seed",
-    "test": "vitest"
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +22,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.13.4",
+    "@vitest/coverage-v8": "^3.0.7",
     "prisma": "^6.4.1",
     "typescript": "^5.7.3",
     "vitest": "^3.0.7"

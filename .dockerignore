@@ -3,3 +3,4 @@ dist/
 .github/
 **/*.test.ts
 vitest.config.ts
+coverage/
