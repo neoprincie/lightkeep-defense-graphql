@@ -56,8 +56,18 @@ jobs:
           echo "### ✅ Passing Acceptance Tests" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           cat reports/cucumber-report.json | jq -r '
-            .[].elements[].steps[] | 
-            select(.result.status == "passed") | 
-            "- " + .name
+            .[] | 
+            .elements[] | 
+            ("**Feature: " + .name + "**" + "\n") + 
+            (
+              .steps[] | 
+              if .result.status == "passed" then 
+                "✅ " + .keyword + " " + .name 
+              elif .result.status == "failed" then 
+                "**❌ " + .keyword + " " + .name + "**" 
+              else 
+                "⚪ " + .keyword + " " + .name 
+              end
+            ) | join("\n")
           ' >> $GITHUB_STEP_SUMMARY
         working-directory: acceptance
