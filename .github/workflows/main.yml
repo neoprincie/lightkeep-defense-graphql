@@ -58,16 +58,18 @@ jobs:
           cat reports/cucumber-report.json | jq -r '
             .[] | 
             .elements[] | 
-            ("**Feature: " + .name + "**" + "\n") + 
             (
-              .steps[] | 
-              if .result.status == "passed" then 
-                "✅ " + .keyword + " " + .name 
-              elif .result.status == "failed" then 
-                "**❌ " + .keyword + " " + .name + "**" 
-              else 
-                "⚪ " + .keyword + " " + .name 
-              end
-            ) | join("\n")
+              "**Feature: " + .name + "**\n\n" + 
+              (
+                .steps[] | 
+                if .result.status == "passed" then 
+                  "✅ " + .keyword + " " + .name + "\n"
+                elif .result.status == "failed" then 
+                  "**❌ " + .keyword + " " + .name + "**\n"
+                else 
+                  "⚪ " + .keyword + " " + .name + "\n"
+                end
+              )
+            )
           ' >> $GITHUB_STEP_SUMMARY
         working-directory: acceptance
