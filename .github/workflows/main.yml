@@ -14,6 +14,7 @@ jobs:
         with:
           node-version: 18
           cache: 'npm'
+          cache-dependency-path: graphql/package-lock.json
       - run: npm ci
         working-directory: graphql
       - run: npm run coverage
@@ -21,6 +22,8 @@ jobs:
       - name: 'Report Coverage'
         if: always() 
         uses:  davelosert/vitest-coverage-report-action@v2
+        with:
+          working-directory: graphql
       
   deploy:
     runs-on: ubuntu-latest
@@ -29,7 +32,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: cd graphql && flyctl deploy --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }}
+      - run: flyctl deploy --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }}
         working-directory: graphql
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
