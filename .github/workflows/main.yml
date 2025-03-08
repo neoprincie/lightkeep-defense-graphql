@@ -14,9 +14,8 @@ jobs:
         with:
           node-version: 18
           cache: 'npm'
-      - run: cd graphql
-      - run: npm ci
-      - run: npm run coverage
+      - run: cd graphql && npm ci
+      - run: cd graphql && npm run coverage
       - name: 'Report Coverage'
         if: always() 
         uses:  davelosert/vitest-coverage-report-action@v2
@@ -28,7 +27,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: cd graphql
-      - run: flyctl deploy --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }}
+      - run: cd graphql && flyctl deploy --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }}
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
