@@ -55,7 +55,7 @@ jobs:
       - run: |
           echo "### ✅ Passing Acceptance Tests" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          cat graphql/reports/cucumber-report.json | jq -r '
+          cat reports/cucumber-report.json | jq -r '
             .[].elements[].steps[] | 
             select(.result.status == "passed") | 
             "- " + .name
