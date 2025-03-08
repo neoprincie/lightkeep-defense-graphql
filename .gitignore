@@ -1,5 +1,5 @@
-node_modules/
-dist/
-postgres-data/
-.env
-coverage/
+**/node_modules/
+**/dist/
+**/postgres-data/
+**/.env
+**/coverage/

@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "compile": "tsc",
-    "start": "npm run compile && node ./dist/src/index.js",
+    "start": "tsc --skipLibCheck && node ./dist/src/index.js",
     "rebuild": "docker-compose up -d --build && prisma generate && prisma migrate deploy",
     "setup": "docker-compose down -v && docker-compose up -d --build && prisma generate && prisma migrate deploy && prisma db seed",
     "test": "vitest",
