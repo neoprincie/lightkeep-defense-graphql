@@ -1,5 +1,6 @@
 {
     "default": {
+        "format": ["json:reports/cucumber-report.json"],
         "formatOptions": {
             "snippetInterface": "synchronous"
         }
