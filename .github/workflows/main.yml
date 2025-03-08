@@ -14,8 +14,10 @@ jobs:
         with:
           node-version: 18
           cache: 'npm'
-      - run: cd graphql && npm ci
-      - run: cd graphql && npm run coverage
+      - run: npm ci
+        working-directory: graphql
+      - run: npm run coverage
+        working-directory: graphql
       - name: 'Report Coverage'
         if: always() 
         uses:  davelosert/vitest-coverage-report-action@v2
@@ -28,5 +30,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: cd graphql && flyctl deploy --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }}
+        working-directory: graphql
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
