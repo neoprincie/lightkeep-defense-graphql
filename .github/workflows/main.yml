@@ -61,7 +61,7 @@ jobs:
             (
               "**Feature: " + .name + "**\n\n" + 
               (
-                .steps[] | 
+                .steps[] | map(
                 if .result.status == "passed" then 
                   "✅ " + .keyword + " " + .name + "\n"
                 elif .result.status == "failed" then 
@@ -69,6 +69,7 @@ jobs:
                 else 
                   "⚪ " + .keyword + " " + .name + "\n"
                 end
+                ) | join("\n")
               )
             )
           ' >> $GITHUB_STEP_SUMMARY
