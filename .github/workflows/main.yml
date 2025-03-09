@@ -61,14 +61,14 @@ jobs:
             (
               "**Feature: " + .name + "**\n\n" + 
               (
-                .steps[] | map(
-                if .result.status == "passed" then 
-                  "✅ " + .keyword + " " + .name + "\n"
-                elif .result.status == "failed" then 
-                  "**❌ " + .keyword + " " + .name + "**\n"
-                else 
-                  "⚪ " + .keyword + " " + .name + "\n"
-                end
+                .steps | map(
+                  if .result.status == "passed" then 
+                    "✅ " + .keyword + " " + .name + "\n"
+                  elif .result.status == "failed" then 
+                    "**❌ " + .keyword + " " + .name + "**\n"
+                  else 
+                    "⚪ " + .keyword + " " + .name + "\n"
+                  end
                 ) | join("\n")
               )
             )
