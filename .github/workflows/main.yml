@@ -63,11 +63,11 @@ jobs:
               (
                 .steps | map(
                   if .result.status == "passed" then 
-                    "**" + .keyword + "** " + .name 
+                    "**" + (.keyword | rtrimstr(" ")) + "** " + .name 
                   elif .result.status == "failed" then 
-                    "❌ **" + .keyword + "** " + .name 
+                    "❌ **" + (.keyword | rtrimstr(" ")) + "** " + .name 
                   else 
-                    "**" + .keyword + "** " + .name 
+                    "**" + (.keyword | rtrimstr(" ")) + "** " + .name 
                   end
                 ) | join("\n")
               )
