@@ -53,7 +53,7 @@ jobs:
       - run: npm run test
         working-directory: acceptance
       - run: |
-          echo "### ✅ Passing Acceptance Tests" >> $GITHUB_STEP_SUMMARY
+          echo "## Acceptance Tests" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           cat reports/cucumber-report.json | jq -r '
             .[] | 
@@ -63,11 +63,11 @@ jobs:
               (
                 .steps | map(
                   if .result.status == "passed" then 
-                    "✅ " + .keyword + " " + .name + "\n"
+                    "**" + .keyword + "**" + .name 
                   elif .result.status == "failed" then 
-                    "**❌ " + .keyword + " " + .name + "**\n"
+                    "❌ **" + .keyword + "**" + .name 
                   else 
-                    "⚪ " + .keyword + " " + .name + "\n"
+                    "**" + .keyword + "**" + .name 
                   end
                 ) | join("\n")
               )
