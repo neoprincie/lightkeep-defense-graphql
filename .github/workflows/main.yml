@@ -74,3 +74,4 @@ jobs:
             )
           ' >> $GITHUB_STEP_SUMMARY
         working-directory: acceptance
+        if: always() 
