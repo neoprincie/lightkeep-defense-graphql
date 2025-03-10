@@ -2,12 +2,14 @@ import assert from 'assert';
 import { Given, When, Then } from '@cucumber/cucumber';
 import { getCharacters } from '../../drivers/charactersDriver.js'
 
-Given('my email is {string}', function (string) {
-    this.email = string;
+Given('I am logged in as {string}', async function (userName) {
+    this.token = await registerUser(this.email, this.givenName, this.surname, "Correcth0rsebatterystaple");
+    //const user = await getUserInfo(userName, this.token)
+    this.userName = userName;
 });
 
 When('I look up my characters', async function () {
-    this.characters = await getCharacters("");
+    this.characters = await getCharacters(this.userName, this.token);
 });
 
 Then('I see only characters that belong to me', function () {

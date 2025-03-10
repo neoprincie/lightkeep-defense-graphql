@@ -1,6 +1,9 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const request = async (query) => {
-    const req = await fetch('https://lightkeep-defense-graphql.fly.dev/', {
+    const req = await fetch(process.env.GRAPHQL_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
