@@ -10,7 +10,8 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@cucumber/cucumber": "^11.2.0"
+    "@cucumber/cucumber": "^11.2.0",
+    "cucumber-html-reporter": "^7.2.0"
   },
   "dependencies": {
     "dotenv": "^16.4.7"
