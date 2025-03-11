@@ -54,13 +54,13 @@ jobs:
         working-directory: acceptance
       - run: |
           git status
-          node acceptance/reporter.js
+          node reporter.js
           git checkout main
-          git add docs/acceptance-tests.html
+          git add ../docs/acceptance-tests.html
           git commit -m "Acceptance test results [skip ci]"
           git push origin main
         if: always() 
-        working-directory: .
+        working-directory: acceptance
       - run: |
           echo "## Acceptance Tests" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
