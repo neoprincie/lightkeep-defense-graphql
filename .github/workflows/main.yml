@@ -53,6 +53,8 @@ jobs:
       - run: npm run test
         working-directory: acceptance
       - run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
           git status
           node reporter.js
           git checkout main
