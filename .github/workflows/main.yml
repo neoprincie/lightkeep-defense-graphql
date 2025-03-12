@@ -60,7 +60,7 @@ jobs:
           git checkout main
           git add ../docs/acceptance-tests.html
           git commit -m "Acceptance test results [skip ci]"
-          git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git
+          git push origin main
         if: always() 
         working-directory: acceptance
       - run: |
