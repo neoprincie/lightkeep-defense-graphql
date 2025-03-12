@@ -3,8 +3,7 @@ import { Given, When, Then } from '@cucumber/cucumber';
 import { getCharacters } from '../../drivers/charactersDriver.js'
 
 Given('I am logged in as {string}', async function (userName) {
-    this.token = await registerUser(this.email, this.givenName, this.surname, "Correcth0rsebatterystaple");
-    //const user = await getUserInfo(userName, this.token)
+    this.token = await registerUser(`${crypto.randomUUID()}@example.com`, `${userName}${crypto.randomUUID()}`, crypto.randomUUID());
     this.userName = userName;
 });
 
