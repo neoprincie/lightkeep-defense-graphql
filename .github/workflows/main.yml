@@ -52,6 +52,8 @@ jobs:
         working-directory: acceptance
       - run: npm run test
         working-directory: acceptance
+        env:
+          GRAPHQL_URL: 'https://lightkeep-defense-graphql.fly.dev/'
       - run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
