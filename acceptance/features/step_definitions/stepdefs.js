@@ -2,6 +2,7 @@ import assert from 'assert';
 import { Given, When, Then } from '@cucumber/cucumber';
 import { getCharacters, newCharacter } from '../../drivers/charactersDriver.js'
 import { registerUser } from '../../drivers/accountsDriver.js';
+import crypto from 'crypto'
 
 Given('I am logged in as {string}', async function (userName) {
     this.userName = `${userName}${crypto.randomUUID()}`;
