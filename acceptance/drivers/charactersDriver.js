@@ -1,6 +1,6 @@
 import { request } from './graphqlWrapper.js'
 
-export const getCharacters = async (userName) => {
+export const getCharacters = async (userName, token) => {
     const query = `#graphql
         query {
             characters {
@@ -12,4 +12,8 @@ export const getCharacters = async (userName) => {
     const req = await request(query);
     
     return req.characters;
+}
+
+export const newCharacter = async (characterName, characterClass, userName, token) => {
+
 }
