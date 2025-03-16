@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { createHash } from 'crypto'
 
 const prisma = new PrismaClient();
 
@@ -6,7 +7,8 @@ async function seed() {
     let user = await prisma.user.create({
         data: {
             name: "princie",
-            email: "bryprinc@gmail.com"
+            email: "bryprinc@gmail.com",
+            password: createHash('sha256').update('supersecret').digest('hex')
         }
     });
 

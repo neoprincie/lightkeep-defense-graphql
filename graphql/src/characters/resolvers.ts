@@ -4,10 +4,14 @@ const prisma = new PrismaClient();
 
 export const resolvers = {
     Query: {
-        characters: (userId: number) => prisma.character.findMany({
-            where: {
-                userId: userId
-            }
-        })
+        characters: (_: any, __: any, context: any) => {
+            if (!context.user) return null;
+
+            return prisma.character.findMany({
+                where: {
+                    userId: context.user.id
+                }
+            })
+        }
     }
 }
