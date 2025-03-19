@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import { GraphQLError } from 'graphql'
 import { createHash } from 'crypto'
 import { PrismaClient } from "@prisma/client";
+import { register } from './userService.js'
 import 'dotenv/config'
 
 const prisma = new PrismaClient();
@@ -21,20 +22,23 @@ export const resolvers = {
         }
     },
     Mutation: {
+        // register: async (_: any, { email, username, password }: any) => {
+        //     const hashedPassword = createHash('sha256').update(password).digest('hex');
+
+        //     let user = await prisma.user.create({
+        //         data: {
+        //             name: username,
+        //             email: email,
+        //             password: hashedPassword
+        //         }
+        //     });
+
+        //     const token = jwt.sign({ id: user.id, email }, process.env.JWT_KEY, { expiresIn: '1h' });
+
+        //     return { token, user: user };
+        // },
         register: async (_: any, { email, username, password }: any) => {
-            const hashedPassword = createHash('sha256').update(password).digest('hex');
-
-            let user = await prisma.user.create({
-                data: {
-                    name: username,
-                    email: email,
-                    password: hashedPassword
-                }
-            });
-
-            const token = jwt.sign({ id: user.id, email }, process.env.JWT_KEY, { expiresIn: '1h' });
-
-            return { token, user: user };
+            return await register({email, username, password});
         },
         login: async (_: any, { username, password }: any) => {
             const hashedPassword = createHash('sha256').update(password).digest('hex');
