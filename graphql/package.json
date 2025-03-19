@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "compile": "tsc",
+    "compile": "tsc --skipLibCheck",
     "start": "tsc --skipLibCheck && node ./dist/src/index.js",
     "rebuild": "docker-compose up -d --build && prisma generate && prisma migrate deploy",
     "setup": "docker-compose down -v && docker-compose up -d --build && prisma generate && prisma migrate deploy && prisma db seed",

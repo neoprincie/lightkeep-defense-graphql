@@ -7,8 +7,7 @@ RUN npm install --omit=dev
 
 COPY . .
 
-RUN npx prisma generate 
-RUN npx prisma migrate deploy
+RUN npx prisma generate
 
 RUN npm run compile
 
