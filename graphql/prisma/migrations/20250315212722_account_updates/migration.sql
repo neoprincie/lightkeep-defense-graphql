@@ -7,7 +7,7 @@
 
 */
 -- AlterTable
-ALTER TABLE "User" ADD COLUMN     "password" TEXT NOT NULL DEFAULT 'TEMPORARY_PASSWORD',
+ALTER TABLE "User" ADD COLUMN     "password" TEXT NOT NULL DEFAULT 'TEMP_PW',
 ALTER COLUMN "name" SET NOT NULL;
 
 -- CreateIndex
