@@ -31,10 +31,13 @@ test('register resolver', async () => {
         password: 'correcthorsebatterystaple'
     })
 
-    // expect(actual).toEqual({
-    //     id: 1,
-    //     name: 'testuser',
-    //     email: 'testuser@example.com',
-    //     password: 'hashedpassword'
-    // })
+    expect(actual).toEqual({
+        token: 'verycooltoken',
+        user: {
+            id: 1,
+            name: 'testuser',
+            email: 'testuser@example.com',
+            password: 'hashedpassword'
+        }
+    })
 })
