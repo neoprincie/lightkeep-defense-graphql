@@ -8,14 +8,33 @@ vi.mock('./userService.js', () => ({
     login: vi.fn()
 }))
 
-// test('register resolver', () => {
-//     vi.mocked(register).mockResolvedValue({
-//         token: 'verycooltoken',
-//         user: {
-//             id: 1,
-//             name: 'testuser',
-//             email: 'testuser@example.com',
-//             password: 'hashedpassword'
-//         }
-//     })
-// })
+test('register resolver', async () => {
+    vi.mocked(register).mockResolvedValue({
+        token: 'verycooltoken',
+        user: {
+            id: 1,
+            name: 'testuser',
+            email: 'testuser@example.com',
+            password: 'hashedpassword'
+        }
+    })
+
+    const actual = await resolvers.Mutation.register({}, {
+        email: 'testuser@example.com',
+        username: 'testuser',
+        password: 'correcthorsebatterystaple'
+    })
+
+    expect(register).toHaveBeenCalledWith({
+        email: 'testuser@example.com',
+        username: 'testuser',
+        password: 'correcthorsebatterystaple'
+    })
+
+    // expect(actual).toEqual({
+    //     id: 1,
+    //     name: 'testuser',
+    //     email: 'testuser@example.com',
+    //     password: 'hashedpassword'
+    // })
+})
