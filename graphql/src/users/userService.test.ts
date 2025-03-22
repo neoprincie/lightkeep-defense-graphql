@@ -1,8 +1,10 @@
 import prisma from '../utils/prismaWrapper.js';
 import jwt from 'jsonwebtoken';
+import { encrypt } from '../utils/encryption.js';
 
 import { register, login } from './userService.js';
-import { describe, Mock, test, vi, expect, beforeEach } from 'vitest';
+import { describe, Mock, test, vi, expect, beforeEach, afterEach } from 'vitest';
+import { PrismaPromise, User } from '@prisma/client';
 
 vi.mock('../utils/prismaWrapper.js', () => ({
     default: {
@@ -13,22 +15,32 @@ vi.mock('../utils/prismaWrapper.js', () => ({
     }
 }));
 
+//vi.mock('../utils/prismaWrapper.js');
+
 vi.mock('jsonwebtoken', () => ({
     default: {
         sign: vi.fn()
     }
 }))
 
+vi.mock('../utils/encryption', () => ({
+    encrypt: vi.fn()
+}))
+
 describe('User service', () => {
+    afterEach(() => vi.resetAllMocks());
+
     beforeEach(() => {
         (jwt.sign as Mock).mockReturnValue("verycooltoken");
+        (encrypt as Mock).mockReturnValue('verycoolhash');
     })
 
     test('register creates a new user', async () => {
-        (prisma.user.create as Mock).mockResolvedValue({
-            id: '1',
+        vi.mocked(prisma.user.create).mockResolvedValue({
+            id: 1,
             name: 'testuser',
-            email: 'testuser@example.com'
+            email: 'testuser@example.com',
+            password: 'verycoolhash'
         });
 
         const actual = await register({
@@ -84,26 +96,69 @@ describe('User service', () => {
         await expect(call).rejects.toThrow("Email already in use.")
     })
 
-    // test('login retrieves the user', async () => {
-    //     (prisma.user.findUnique as Mock).mockImplementation(({ where }) => {
-    //         if (where.name === 'testuser') {
-    //             return Promise.resolve({
-    //                 id: '1',
-    //                 name: 'testuser',
-    //                 email: 'testuser@example.com',
-    //                 password: 'verycooltoken'
-    //             })
-    //         }
-    //         return Promise.resolve(null);
-    //     })
+    test('login retrieves the user', async () => {
+        (prisma.user.findUnique as Mock).mockImplementation(({ where }) => {
+            if (where.name === 'testuser') {
+                return Promise.resolve({
+                    id: '1',
+                    name: 'testuser',
+                    email: 'testuser@example.com',
+                    password: 'verycoolhash'
+                })
+            }
+            return Promise.resolve(null);
+        });
 
-    //     const actual = await login({
-    //         username: 'testuser',
-    //         password: 'correcthorsebatterystaple'
-    //     })
+        const actual = await login({
+            username: 'testuser',
+            password: 'correcthorsebatterystaple'
+        })
 
-    //     expect(actual.user.name).toBe('testuser');
-    //     expect(actual.token).toBe('verycooltoken');
-    //     expect(prisma.user.create).toHaveBeenCalled();
-    // })
+        expect(actual.user.name).toBe('testuser');
+        expect(actual.token).toBe('verycooltoken');
+        expect(prisma.user.findUnique).toHaveBeenCalled();
+    })
+
+    test('login hashes the password', async () => {
+        vi.mocked(prisma.user.findUnique).mockResolvedValue({
+            id: 1,
+            name: 'testuser',
+            email: 'testuser@example.com',
+            password: 'verycoolhash'
+        });
+
+        await login({
+            username: 'testuser',
+            password: 'correcthorsebatterystaple'
+        })
+
+        expect(encrypt).toHaveBeenCalledWith('correcthorsebatterystaple')
+    })
+
+    test('login fails if user name is not found', async () => {
+        const call = login({
+            username: 'testuser',
+            password: 'correcthorsebatterystaple'
+        })
+
+        await expect(call).rejects.toThrow("User name or password incorrect.")
+    })
+
+    test('login fails if password is incorrect', async () => {
+        vi.mocked(prisma.user.findUnique).mockResolvedValue({
+            id: 1,
+            name: 'testuser',
+            email: 'testuser@example.com',
+            password: 'verycoolhash'
+        });
+
+        (encrypt as Mock).mockReturnValue('incorrecthash');
+        
+        const call = login({
+            username: 'testuser',
+            password: 'correcthorsebatterystaple'
+        })
+
+        await expect(call).rejects.toThrow("User name or password incorrect.")
+    })
 })

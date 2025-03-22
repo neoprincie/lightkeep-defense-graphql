@@ -3,7 +3,6 @@ export const typeDef = `#graphql
         id: Int!
         name: String!
         email: String!
-        token: String
     }
 
     type AuthPayload {
