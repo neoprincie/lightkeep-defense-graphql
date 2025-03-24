@@ -20,11 +20,13 @@ export const resolvers = {
         }
     },
     Mutation: {
-        register: async (_: any, { email, username, password }: any) => {
-            return await register({email, username, password});
+        register: async (_: any, { email, username, password }: any, context: any) => {
+            //return await register({email, username, password});
+            return await context.service.user.register({email, username, password})
         },
-        login: async (_: any, { username, password }: any) => {
-            return await login({ username, password })
+        login: async (_: any, { username, password }: any, context: any) => {
+            //return await login({ username, password })
+            return await context.service.user.login({username, password})
         }
     }
 }

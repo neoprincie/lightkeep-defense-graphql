@@ -1,5 +1,5 @@
 import { describe, vi, test, expect, afterEach } from 'vitest'
-import { register, login } from './userService.js'
+import { register, login, UserService } from './userService.js'
 
 import { resolvers } from './resolvers.js'
 import { GraphQLError } from 'graphql'
@@ -31,7 +31,7 @@ test('register resolver', async () => {
         email: 'testuser@example.com',
         username: 'testuser',
         password: 'correcthorsebatterystaple'
-    })
+    }, {})
 
     expect(register).toHaveBeenCalledWith({
         email: 'testuser@example.com',
@@ -64,7 +64,7 @@ test('login resolver', async () => {
     const actual = await resolvers.Mutation.login({}, {
         username: 'testuser',
         password: 'correcthorsebatterystaple'
-    })
+    }, {})
 
     expect(login).toHaveBeenCalledWith({
         username: 'testuser',
