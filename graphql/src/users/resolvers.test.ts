@@ -16,6 +16,12 @@ vi.mock('./userService.js', () => ({
     login: vi.fn()
 }))
 
+const mockContext = {
+    service: {
+
+    }
+}
+
 test('register resolver', async () => {
     vi.mocked(register).mockResolvedValue({
         token: 'verycooltoken',
@@ -61,10 +67,10 @@ test('login resolver', async () => {
         }
     })
 
-    const actual = await resolvers.Mutation.login({}, {
+    const actual = await resolvers.Mutation?.login?.({}, {
         username: 'testuser',
         password: 'correcthorsebatterystaple'
-    }, {})
+    }, {}, {})
 
     expect(login).toHaveBeenCalledWith({
         username: 'testuser',

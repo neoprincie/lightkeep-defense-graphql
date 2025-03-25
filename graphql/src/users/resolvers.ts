@@ -4,8 +4,9 @@ import { createHash } from 'crypto'
 import { PrismaClient } from "@prisma/client";
 import { register, login } from './userService.js'
 import 'dotenv/config'
+import { Resolvers } from '../generated/graphql.js';
 
-export const resolvers = {
+export const resolvers: Resolvers = {
     Query: {
         me: (_: any, __: any, context: any) => {
             if (!context.user) {
@@ -15,7 +16,7 @@ export const resolvers = {
                     },
                 });
             }
-
+            
             return context.user;
         }
     },

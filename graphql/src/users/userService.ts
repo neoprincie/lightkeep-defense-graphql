@@ -3,15 +3,21 @@ import prisma from '../utils/prismaWrapper.js';
 import jwt from 'jsonwebtoken';
 import { GraphQLError } from 'graphql';
 import { PrismaClient } from '@prisma/client';
+import { User, AuthPayload } from '../generated/graphql.js';
 
-export class UserService {
+export interface IUserService {
+    register(email: string, username: string, password: string): Promise<AuthPayload>
+    login(username: string, password: string): Promise<AuthPayload>
+}
+
+export class UserService implements IUserService {
     private prisma: PrismaClient
 
     constructor(prisma: PrismaClient) {
         this.prisma = prisma
     }
 
-    async register({ email, username, password }: any) {
+    async register(email: string, username: string, password: string): Promise<AuthPayload> {
         const hashedPassword = encrypt(password);
     
         await this.checkForUniqueUserName(username);
@@ -30,7 +36,7 @@ export class UserService {
         return { token, user: user };
     }
     
-    async login ({ username, password }: any) {
+    async login (username: any, password: any): Promise<AuthPayload> {
         const hashedPassword = encrypt(password); 
     
         let user = await this.prisma.user.findUnique({
