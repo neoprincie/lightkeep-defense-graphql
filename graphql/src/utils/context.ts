@@ -1,16 +1,30 @@
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import { PrismaClient } from '@prisma/client'
 
-import { UserService } from '../users/userService.js'
+import { IUserService, UserService } from '../users/userService.js'
 
-export const getContext = ({req, res}) => {
+export interface IUserContext {
+    id: string
+    email: string
+}
+
+export interface IServiceContext {
+    user: IUserService
+}
+
+export interface IContext {
+    user: string | JwtPayload
+    service: IServiceContext
+}
+
+export const getContext = ({req, res}): IContext => {
     return {
         user: getUserContext(req),
         service: getServicesContext()
     }
 }
 
-const getUserContext = (req) => {
+const getUserContext = (req): string | JwtPayload => {
     if (req == null) return null
 
     const token = req.headers.authorization || ''
@@ -20,7 +34,7 @@ const getUserContext = (req) => {
     return jwt.verify(token.replace('Bearer ', ''), process.env.JWT_KEY);
 }
 
-const getServicesContext = () => {
+const getServicesContext = (): IServiceContext => {
     const prisma = new PrismaClient()
 
     const userService = new UserService(prisma)
