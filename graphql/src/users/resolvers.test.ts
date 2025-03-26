@@ -1,8 +1,7 @@
-import { describe, vi, test, expect, afterEach, beforeEach, beforeAll } from 'vitest'
-import { register, login, UserService, IUserService } from './userService.js'
+import { describe, vi, test, expect, beforeEach } from 'vitest'
+import { IUserService } from './userService.js'
 
 import { resolvers } from './resolvers.js'
-import { GraphQLError } from 'graphql'
 import { ApolloServer, GraphQLResponse } from '@apollo/server'
 import { readFileSync } from 'fs'
 import { AuthPayload, User } from '../generated/graphql.js'
@@ -13,11 +12,6 @@ const testUser = {
     email: 'testuser@example.com',
     password: 'hashedpassword'
 }
-
-vi.mock('./userService.js', () => ({
-    register: vi.fn(),
-    login: vi.fn()
-}))
 
 const mockUserService: IUserService = {
     register: vi.fn(),
@@ -37,15 +31,6 @@ const mockContext = {
     service: {
         user: mockUserService
     }
-}
-
-const callResolver = async <T>(
-    resolver: any, // Loosen type restriction
-    args: any,
-    context: any = {}
-): Promise<T> => {
-    if (!resolver) throw new Error("Resolver not implemented");
-    return resolver({}, args, context, {}); // Pass all four arguments
 }
 
 describe('user resolver tests', () => {
@@ -194,8 +179,6 @@ describe('user resolver tests', () => {
     })
 
     test('me resolver not authorized', async () => {
-        let error
-
         const response = await server.executeOperation({
             query: `#graphql
                 query Me {
