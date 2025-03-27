@@ -1,11 +1,8 @@
-import jwt from 'jsonwebtoken';
 import { GraphQLError } from 'graphql'
-import { createHash } from 'crypto'
-import { PrismaClient } from "@prisma/client";
-import { register, login } from './userService.js'
 import 'dotenv/config'
+import { Resolvers } from '../generated/graphql.js';
 
-export const resolvers = {
+export const resolvers: Resolvers = {
     Query: {
         me: (_: any, __: any, context: any) => {
             if (!context.user) {
@@ -15,16 +12,16 @@ export const resolvers = {
                     },
                 });
             }
-
+            
             return context.user;
         }
     },
     Mutation: {
-        register: async (_: any, { email, username, password }: any) => {
-            return await register({email, username, password});
+        register: async (_: any, { email, username, password }: any, context: any) => {
+            return await context.service.user.register({ email, username, password })
         },
-        login: async (_: any, { username, password }: any) => {
-            return await login({ username, password })
+        login: async (_: any, { username, password }: any, context: any) => {
+            return await context.service.user.login({ username, password })
         }
     }
 }
