@@ -3,17 +3,13 @@ import { PostgreSqlContainer, StartedPostgreSqlContainer } from '@testcontainers
 import { execSync } from 'child_process'
 import { PrismaClient } from "@prisma/client";
 import { createHash } from 'crypto'
-import { ApolloServer } from '@apollo/server'
-//import prisma, { resetPrismaClient } from '../utils/prismaWrapper.js'
-
-
+import { ApolloServer, GraphQLResponse } from '@apollo/server'
 import { users } from './index.js'
 import { getContext } from '../utils/context.js'
-import { UserService } from './userService.js'
-import { startStandaloneServer } from '@apollo/server/dist/esm/standalone/index.js';
+import { AuthPayload } from '../generated/graphql.js';
 
 let container: StartedPostgreSqlContainer
-let server: any
+let server: ApolloServer
 let prisma: PrismaClient
 
 describe('user integration tests', () =>{
@@ -23,17 +19,13 @@ describe('user integration tests', () =>{
 
         execSync('npx prisma migrate deploy', { env: process.env, stdio: 'inherit' });
 
-        //resetPrismaClient()
         prisma = new PrismaClient()
-        //const userService = new UserService(prisma)
-
-        console.log(await prisma.user.findMany())
         
         await prisma.user.create({
             data: {
-                name: "princie",
-                email: "bryprinc@gmail.com",
-                password: createHash('sha256').update('supersecret').digest('hex')
+                name: "testuser",
+                email: "testuser@example.com",
+                password: createHash('sha256').update('correcthorsebatterystaple').digest('hex')
             }
         });
 
@@ -48,8 +40,12 @@ describe('user integration tests', () =>{
         await container.stop();
     }, 60000)
 
-    test('try out test container', async () => {
-        const response: any = await server.executeOperation({
+    test('login should log in with valid credentials', async () => {
+        type LoginResponse = {
+            login: AuthPayload
+        }
+
+        const response: GraphQLResponse<LoginResponse> = await server.executeOperation({
             query: `#graphql
                 mutation Login($username: String!, $password: String!) {
                     login(username: $username, password: $password) {
@@ -63,24 +59,28 @@ describe('user integration tests', () =>{
                 }
             `,
             variables: {
-                username: 'princie',
-                password: 'supersecret'
+                username: 'testuser',
+                password: 'correcthorsebatterystaple'
             }
         },
         {
             contextValue: getContext({req: null, res: null})
         })
 
-        const payload = response.body.singleResult.data.login;
+        let actual: AuthPayload
+        if (response.body.kind === 'single' && response.body.singleResult.data) {
+            actual = response.body.singleResult.data.login
+        }
 
-        //expect(payload.token).toBe('verycooltoken')
-        expect(payload.user.name).toBe('princie')
-
-        console.log(await prisma.user.findMany())
+        expect(actual.user.name).toBe('testuser')
     })
 
-    test('try out register', async () => {
-        const response: any = await server.executeOperation({
+    test('register should create a new user', async () => {
+        type RegisterResponse = {
+            register: AuthPayload
+        }
+
+        const response: GraphQLResponse<RegisterResponse> = await server.executeOperation({
             query: `#graphql
                 mutation Register($email: String!, $username: String!, $password: String!) {
                     register(email: $email, username: $username, password: $password) {
@@ -103,10 +103,11 @@ describe('user integration tests', () =>{
             contextValue: getContext({req: null, res: null})
         })
 
-        const payload = response.body.singleResult.data.register;
+        let actual: AuthPayload
+        if (response.body.kind === 'single' && response.body.singleResult.data) {
+            actual = response.body.singleResult.data.register
+        }
 
-        console.log(await prisma.user.findMany())
-        //expect(payload.token).toBe('verycooltoken')
-        expect(payload.user.name).toBe('testuser2')
+        expect(actual.user.name).toBe('testuser2')
     })
 })
