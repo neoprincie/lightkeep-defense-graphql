@@ -68,7 +68,7 @@ describe('user integration tests', () =>{
         })
 
         let actual: AuthPayload
-        console.log(JSON.stringify(actual))
+        console.log(JSON.stringify(response))
         if (response.body.kind === 'single' && response.body.singleResult.data) {
             actual = response.body.singleResult.data.login
         }
