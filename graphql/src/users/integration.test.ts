@@ -16,6 +16,7 @@ describe('user integration tests', () =>{
     beforeAll(async () => {
         container = await new PostgreSqlContainer().start()
         process.env.DATABASE_URL = container.getConnectionUri()
+        process.env.JWT_KEY = "supersecretjwtkey"
 
         execSync('npx prisma migrate deploy', { env: process.env, stdio: 'inherit' });
 
