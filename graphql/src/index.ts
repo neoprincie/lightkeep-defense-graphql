@@ -19,20 +19,6 @@ const server = new ApolloServer({
   
 const { url } = await startStandaloneServer(server, {
     context: async ({req, res}) => getContext({req, res}),
-    //   {
-    //   console.log('hello?');
-    //   // Get the user token from the headers.
-    //   const token = req.headers.authorization || '';
-
-    //   if (!token) return;
-    //   // Try to retrieve a user with the token
-    //   const decoded = jwt.verify(token.replace('Bearer ', ''), process.env.JWT_KEY);
-    //   const user = decoded;
-
-    //   console.log(user);
-    //   // Add the user to the context
-    //   return { user };
-    // },
     listen: { port: 8080 },
 });
 
