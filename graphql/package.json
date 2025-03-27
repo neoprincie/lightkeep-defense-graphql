@@ -5,8 +5,8 @@
   "scripts": {
     "compile": "tsc --skipLibCheck",
     "start": "tsc --skipLibCheck && node ./dist/src/index.js",
-    "rebuild": "docker-compose up -d --build && prisma generate && prisma migrate deploy",
-    "setup": "docker-compose down -v && docker-compose up -d --build && prisma generate && prisma migrate deploy && prisma db seed",
+    "rebuild": "docker compose up -d --build && prisma generate && prisma migrate deploy",
+    "setup": "docker compose down -v && docker compose up -d --build && prisma generate && prisma migrate deploy && prisma db seed",
     "prisma": "prisma generate && prisma migrate dev",
     "test": "vitest",
     "coverage": "vitest run --coverage",
