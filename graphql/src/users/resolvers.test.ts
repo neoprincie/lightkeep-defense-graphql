@@ -39,7 +39,7 @@ describe('user resolver tests', () => {
 
     beforeEach(() => {
         server = new ApolloServer({ 
-            typeDefs: [`type Query`, typeDef], 
+            typeDefs: [`type Query type Mutation`, typeDef], 
             resolvers: resolvers
         })
     })

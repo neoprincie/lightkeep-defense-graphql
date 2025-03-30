@@ -9,7 +9,7 @@ let testServer: ApolloServer
 
 const createTestServer = (mockResolvers) => {
     return new ApolloServer({
-        typeDefs: [`type Query`, typeDef, characterClasses.typeDef, users.typeDef],
+        typeDefs: [`type Query type Mutation`, typeDef, characterClasses.typeDef, users.typeDef],
         resolvers: mockResolvers
     })
 }

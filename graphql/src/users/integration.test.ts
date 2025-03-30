@@ -31,7 +31,7 @@ describe('user integration tests', () =>{
         });
 
         server = new ApolloServer({ 
-            typeDefs: [`type Query`, users.typeDef], 
+            typeDefs: [`type Query type Mutation`, users.typeDef], 
             resolvers: users.resolvers
         }) as any
     }, 60000)

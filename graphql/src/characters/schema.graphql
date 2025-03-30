@@ -14,3 +14,7 @@ type Character {
 extend type Query {
     characters: [Character]
 }
+
+extend type Mutation {
+    newCharacter(name: String!, classId: Int!): Character
+}

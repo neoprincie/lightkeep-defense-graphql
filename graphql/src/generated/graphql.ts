@@ -49,6 +49,7 @@ export type CharacterClass = {
 export type Mutation = {
   __typename?: 'Mutation';
   login?: Maybe<AuthPayload>;
+  newCharacter?: Maybe<Character>;
   register?: Maybe<AuthPayload>;
 };
 
@@ -56,6 +57,12 @@ export type Mutation = {
 export type MutationLoginArgs = {
   password: Scalars['String']['input'];
   username: Scalars['String']['input'];
+};
+
+
+export type MutationNewCharacterArgs = {
+  classId: Scalars['Int']['input'];
+  name: Scalars['String']['input'];
 };
 
 
@@ -206,6 +213,7 @@ export type CharacterClassResolvers<ContextType = any, ParentType extends Resolv
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   login?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'password' | 'username'>>;
+  newCharacter?: Resolver<Maybe<ResolversTypes['Character']>, ParentType, ContextType, RequireFields<MutationNewCharacterArgs, 'classId' | 'name'>>;
   register?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationRegisterArgs, 'email' | 'password' | 'username'>>;
 };
 
