@@ -10,6 +10,7 @@ import 'dotenv/config';
 
 const typeDefs = `#graphql
   type Query
+  type Mutation
 `;
 
 const server = new ApolloServer({

@@ -2,15 +2,28 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export const request = async (query) => {
+export const request = async (query, variables = {}, token = '') => {
+    let headers
+    if (token === '') {
+      headers = {
+        'Content-Type': 'application/json',
+        Accept: "application/json"
+      }
+    }
+    else {
+      headers = {
+        'Content-Type': 'application/json',
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    }
+
     const req = await fetch(process.env.GRAPHQL_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: "application/json",
-        },
+        headers: headers,
         body: JSON.stringify({
-          query: query
+          query: query,
+          variables: variables
         }),
       });
 

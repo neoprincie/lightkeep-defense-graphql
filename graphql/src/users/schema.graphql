@@ -9,7 +9,7 @@ type AuthPayload {
     user: User!
 }
 
-type Mutation {
+extend type Mutation {
     login(username: String!, password: String!): AuthPayload
     register(email: String!, username: String!, password: String!): AuthPayload
 }
