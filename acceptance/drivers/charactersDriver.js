@@ -4,8 +4,23 @@ export const getCharacters = async (userName, token) => {
     const query = `#graphql
         query {
             characters {
-                name,
+                name
+                class {
+                    name
+                    baseHp
+                }
                 level
+                user {
+                    id
+                    name
+                    email
+                }
+                attack
+                currentHp
+                defense
+                experience
+                id
+                maxHp
             }
         }
     `

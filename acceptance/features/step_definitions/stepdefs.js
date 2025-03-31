@@ -11,8 +11,14 @@ Given('I am logged in as {string}', async function (userName) {
 });
 
 Given('I have a character named {string}', async function (characterName) {
-    this.characterName = `Napryn${crypto.randomUUID()}`
-    await newCharacter(this.characterName, "Warrior", this.userName, this.token);
+    if (!this.characterNames) {
+        this.characterNames = []
+    }
+
+    const newCharName = `${characterName}${crypto.randomUUID()}`
+    this.characterNames.push(newCharName)
+
+    await newCharacter(newCharName, "Warrior", this.userName, this.token);
 });
 
 When('I look up my characters', async function () {
@@ -20,7 +26,10 @@ When('I look up my characters', async function () {
 });
 
 Then('I see only characters that belong to me', function () {
-    assert.equal(this.characters[0].name, this.characterName);
-    assert.equal(this.characters[0].level, 1);
-    //assert.equal(this.characters[0].user.name, this.userName);
+    assert.equal(this.characters.length, this.characterNames.length)
+
+    this.characters.forEach(char => {
+        assert.ok(this.characterNames.includes(char.name))
+        assert.equal(char.user.name, this.userName);
+    })
 });
