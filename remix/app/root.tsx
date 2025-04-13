@@ -8,9 +8,10 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
-import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
+import { ColorSchemeScript, Container, MantineProvider, Title, mantineHtmlProps } from '@mantine/core';
 
 import "./tailwind.css";
+import React from 'react';
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -45,5 +46,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <React.Fragment>
+      <Container size="xs">
+        <Title order={1} my="xl">Lightkeep Defense</Title>
+      </Container>
+      
+      <Outlet />
+    </React.Fragment>
+  );
 }
