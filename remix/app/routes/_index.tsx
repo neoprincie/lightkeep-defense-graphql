@@ -9,11 +9,36 @@ export async function loader({
   request,
 }: LoaderFunctionArgs) {
   const cookieHeader = request.headers.get("Cookie");
-  const cookie =
-    (await userPrefs.parse(cookieHeader)) || {};
+  const cookie = (await userPrefs.parse(cookieHeader)) || {};
 
-  console.log('COOKIES!! ' + cookie.token);
-  return json({ showBanner: cookie.token });
+  const query = `#graphql
+    query Characters {
+      characters {
+        name
+        class {
+          name
+          baseHp
+        }
+        level
+        user {
+          id
+          name
+          email
+        }
+        attack
+        currentHp
+        defense
+        experience
+        id
+        maxHp
+      }
+    } 
+  `
+  const req = await execGql(query, {}, cookie.token);
+
+  console.log(req.characters)
+
+  return null;
 }
 
 
@@ -21,53 +46,7 @@ export const action = async ({
   params,
   request,
 }: ActionFunctionArgs) => {
-  const cookieHeader = request.headers.get("Cookie");
-  const cookie =
-    (await userPrefs.parse(cookieHeader)) || {};
-  //invariant(params.contactId, "Missing contactId param");
-  const formData = await request.formData();
-  const registerInfo = Object.fromEntries(formData);
-
-  const query = `#graphql
-      mutation($email: String!, $username: String!, $password: String!) {
-          register(email: $email, username: $username, password: $password) {
-              token
-              user {
-                  name
-                  id
-                  email
-              }
-          }
-      }
-  `
-
-  const variables = {
-      "email": registerInfo.email,
-      "username": registerInfo.username,
-      "password": registerInfo.password
-  }
-
-  const req = await execGql(query, variables);
-  
-  //console.log(req.register.token)
-  //console.log(req.register.user)
-
-  //console.log(registerInfo.password)
-  //console.log(registerInfo.confirmPassword)
-
-  //const cookie = createCookie("user");
-  cookie.token = req.register.token;
-
-  //return req.register;
-  return redirect("/", {
-    headers: {
-      "Set-Cookie": await userPrefs.serialize(cookie),
-    },
-  });
-
-  //return null;
-  //await updateContact(params.contactId, updates);
-  //return redirect(`/contacts/${params.contactId}`);
+  return null;
 };
 
 
